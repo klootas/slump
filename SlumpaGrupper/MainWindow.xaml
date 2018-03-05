@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SlumpaGrupper"
         mc:Ignorable="d"
         Title="Slumpa grupper" Height="747.384" Width="661.491">
-    <!--<Button x:Name="PresentationBtn" Margin="162,-23,10.2,691" Content="Presentera" Click="PresentationBtn_Click" Padding="10,0,10,0" Grid.ColumnSpan="5" />-->
+
     <Window.Resources>
         <Style x:Key="GroupHeaderStyle" TargetType="{x:Type GroupItem}">
             <Setter Property="Template">
@@ -22,25 +22,31 @@
         </Style>
     </Window.Resources>
 
-    <Grid Margin="0,27,0.2,-0.4">
+    <Grid Margin="0">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0" Margin="10,10,10.2,10" Grid.ColumnSpan="5">
+        <Menu Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="26" VerticalAlignment="Top" Width="100">
+            <MenuItem Header="File">
+                <MenuItem Header="Edit" Click="MenuItem_Click"/>
+            </MenuItem>
+        </Menu>
+
+        <Grid Grid.Column="0" Margin="10,30,10,10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition />
             </Grid.RowDefinitions>
-            
+
             <StackPanel Grid.Row="0" Orientation="Horizontal">
                 <Label Content="Gruppstorlek" Padding="0" Width="107" FontWeight="Bold" FontSize="14"/>
                 <TextBox x:Name="GroupSizeTxtBox" Text="3" Height="23" TextWrapping="Wrap" Width="35" />
                 <Button x:Name="GroupBtn" Margin="10,0,0,0" Content="Skapa grupper" Click="GroupBtn_Click" Padding="10,0,10,0" />
-                
+
             </StackPanel>
-            <DataGrid x:Name="NameTable" Grid.Row="1" Margin="0,9.8,0.2,50.6" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" AlternatingRowBackground="#FF73E2D8" AlternationCount="1">
+            <DataGrid x:Name="NameTable" Grid.Row="1" Margin="0,10,0,0" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" AlternatingRowBackground="#FF73E2D8" AlternationCount="1">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Förnamn" Binding="{Binding FirstName}"/>
                     <DataGridTextColumn Header="Efternamn" Binding="{Binding LastName}"/>
@@ -55,16 +61,23 @@
         </DataGrid.RowDetailsTemplate>-->
             </DataGrid>
         </Grid>
-        
-        <Grid x:Name="groupPanel" Margin="9.8,0,0.2,0" Grid.Column="5" Visibility="Hidden" >
+
+        <Grid x:Name="groupPanel" Margin="10,0,0,0" Grid.Column="1" Visibility="Hidden" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition />
             </Grid.RowDefinitions>
-            <Slider x:Name="fontSlider" ValueChanged="Slider_ValueChanged"
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Slider x:Name="fontSlider" Grid.Column="0" ValueChanged="Slider_ValueChanged"
     Thumb.DragStarted="Slider_DragStarted"
-    Thumb.DragCompleted="Slider_DragCompleted" Grid.Row="0" Margin="10" Minimum="10" Maximum="30" Value="20" />
-            <ScrollViewer Grid.Row="1">
+    Thumb.DragCompleted="Slider_DragCompleted" Margin="10" Minimum="10" Maximum="30" Value="20" />
+                <Button x:Name="PresentationBtn" Grid.Column="1" Margin="10,0,10,0" Content="Presentera" Click="PresentationBtn_Click" Padding="10" />
+            </Grid>
+            <ScrollViewer Grid.Row="1" Margin="0,10,0,0">
                 <ItemsControl x:Name="groupData" >
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -87,12 +100,7 @@
                 </ItemsControl>
             </ScrollViewer>
         </Grid>
-        <Menu HorizontalAlignment="Left" Height="26" VerticalAlignment="Top" Width="100" Margin="-1,-21,0,0">
-            <MenuItem Header="File">
-                <MenuItem Header="Edit" Click="MenuItem_Click"/>
-            </MenuItem>
-        </Menu>
-         <!--<DataGrid x:Name="GroupData" Margin="0,96,10,195" Grid.Column="1" Visibility="Hidden" AlternatingRowBackground="#FF69C5CE" AlternationCount="2" RowBackground="#FFE8DF8E">
+        <!--<DataGrid x:Name="GroupData" Margin="0,96,10,195" Grid.Column="1" Visibility="Hidden" AlternatingRowBackground="#FF69C5CE" AlternationCount="2" RowBackground="#FFE8DF8E">
 
             -->
         <!--<DataGrid.GroupStyle>
