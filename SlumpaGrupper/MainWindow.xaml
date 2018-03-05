@@ -1,0 +1,110 @@
+﻿<Window x:Name="TheWindow" x:Class="SlumpaGrupper.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SlumpaGrupper"
+        mc:Ignorable="d"
+        Title="Slumpa grupper" Height="747.384" Width="661.491">
+    <!--<Button x:Name="PresentationBtn" Margin="162,-23,10.2,691" Content="Presentera" Click="PresentationBtn_Click" Padding="10,0,10,0" Grid.ColumnSpan="5" />-->
+    <Window.Resources>
+        <Style x:Key="GroupHeaderStyle" TargetType="{x:Type GroupItem}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                        <StackPanel>
+                            <TextBlock Text="{Binding Name}"/>
+                            <ItemsPresenter/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="0,27,0.2,-0.4">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0" Margin="10,10,10.2,10" Grid.ColumnSpan="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            
+            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <Label Content="Gruppstorlek" Padding="0" Width="107" FontWeight="Bold" FontSize="14"/>
+                <TextBox x:Name="GroupSizeTxtBox" Text="3" Height="23" TextWrapping="Wrap" Width="35" />
+                <Button x:Name="GroupBtn" Margin="10,0,0,0" Content="Skapa grupper" Click="GroupBtn_Click" Padding="10,0,10,0" />
+                
+            </StackPanel>
+            <DataGrid x:Name="NameTable" Grid.Row="1" Margin="0,9.8,0.2,50.6" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" AlternatingRowBackground="#FF73E2D8" AlternationCount="1">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Förnamn" Binding="{Binding FirstName}"/>
+                    <DataGridTextColumn Header="Efternamn" Binding="{Binding LastName}"/>
+                    <DataGridCheckBoxColumn Header="Deltar" Binding="{Binding Deltar}"/>
+                    <DataGridCheckBoxColumn Header="Gruppledare" Binding="{Binding Leder}"/>
+                </DataGrid.Columns>
+                <!--<DataGrid.RowDetailsTemplate>
+            <DataTemplate>
+                <TextBlock Text="{Binding }"/>
+                
+            </DataTemplate>
+        </DataGrid.RowDetailsTemplate>-->
+            </DataGrid>
+        </Grid>
+        
+        <Grid x:Name="groupPanel" Margin="9.8,0,0.2,0" Grid.Column="5" Visibility="Hidden" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Slider x:Name="fontSlider" ValueChanged="Slider_ValueChanged"
+    Thumb.DragStarted="Slider_DragStarted"
+    Thumb.DragCompleted="Slider_DragCompleted" Grid.Row="0" Margin="10" Minimum="10" Maximum="30" Value="20" />
+            <ScrollViewer Grid.Row="1">
+                <ItemsControl x:Name="groupData" >
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="0,0,20,20" >
+                                <TextBlock Text="{Binding Group}" FontWeight="Bold" Width="Auto" />
+                                <DataGrid SizeChanged="DataGrid_SizeChanged" HorizontalAlignment="Left" FontSize="{Binding Value, ElementName=fontSlider}" AutoGenerateColumns="False" ItemsSource="{Binding}" Margin="0,5,0,0" AlternatingRowBackground="White" AlternationCount="2" RowBackground="#FF2AB434">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Förnamn" Binding="{Binding FirstName}"  Width="Auto" />
+                                        <DataGridTextColumn Header="Efternamn" Binding="{Binding LastName}"  Width="Auto" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+        <Menu HorizontalAlignment="Left" Height="26" VerticalAlignment="Top" Width="100" Margin="-1,-21,0,0">
+            <MenuItem Header="File">
+                <MenuItem Header="Edit" Click="MenuItem_Click"/>
+            </MenuItem>
+        </Menu>
+         <!--<DataGrid x:Name="GroupData" Margin="0,96,10,195" Grid.Column="1" Visibility="Hidden" AlternatingRowBackground="#FF69C5CE" AlternationCount="2" RowBackground="#FFE8DF8E">
+
+            -->
+        <!--<DataGrid.GroupStyle>
+                <GroupStyle ContainerStyle="{StaticResource GroupHeaderStyle}">
+                    <GroupStyle.Panel>
+                        <ItemsPanelTemplate>
+                            <DataGridRowsPresenter />
+                        </ItemsPanelTemplate>
+                    </GroupStyle.Panel>
+                </GroupStyle>
+            </DataGrid.GroupStyle>-->
+        <!--
+        </DataGrid>-->
+    </Grid>
+</Window>
