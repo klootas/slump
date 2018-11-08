@@ -27,7 +27,7 @@ namespace SlumpaGrupper
 
             if (fromTxtFile.Length > 0)
             {
-                var textBoxText = fromTxtFile.Aggregate((a, b) => a + "\n" + b);
+                var textBoxText = fromTxtFile.Aggregate((a, b) => a + ", " + b);
 
                 StudentsTxtBox.Text = textBoxText;
             }
@@ -37,7 +37,7 @@ namespace SlumpaGrupper
         {
             // Restart the program to load in all text again.
             // FIXME find a way to load PopulatePersons from the main window so we don't have to restart the whole program. 
-            TextReader.SaveToFile(StudentsTxtBox.Text);
+            TextReader.SaveToFile(StudentsTxtBox.Text.Replace(", ", Environment.NewLine));
             System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
             Application.Current.Shutdown();
         }
