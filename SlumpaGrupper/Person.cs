@@ -11,9 +11,7 @@ namespace SlumpaGrupper
 {
     class Person: DependencyObject
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public bool FirstNameUnique { private get; set; }
+        public string Name { get; set; }
         public string Group { get; set; }
 
         public bool Deltar
@@ -26,18 +24,15 @@ namespace SlumpaGrupper
         public static readonly DependencyProperty DeltarProperty =
             DependencyProperty.Register(nameof(Deltar), typeof(bool), typeof(Person));
 
-        public Person(string firstName, string lastName)
+        public Person(string name)
         {
-            FirstName = firstName;
-            LastName = lastName;
-
-            FirstNameUnique = false;
+            Name = name;
             Deltar = true;
         }
 
         public override string ToString()
         {
-            return FirstName +" "+ LastName;
+            return Name;
         }
     }
 }

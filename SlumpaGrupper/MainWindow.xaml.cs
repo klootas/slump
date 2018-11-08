@@ -38,7 +38,6 @@ namespace SlumpaGrupper
 
         public void PopulatePersons()
         {
-
             string[] personsFromFile = TextReader.LoadFromFile();
 
             if (personsFromFile.Length == 0 || personsFromFile[0] == "")
@@ -49,12 +48,7 @@ namespace SlumpaGrupper
 
             foreach (var student in personsFromFile)
             {
-                string[] variables = student.Split(' ');
-
-                if (variables.Length > 1 && variables[0] != "" && variables[1] != "")
-                {
-                    persons.Add(new Person(variables[0], variables[1]));
-                }
+                persons.Add(new Person(student));
             }
             NameTable.ItemsSource = persons;
 
