@@ -44,14 +44,13 @@
                 <Label Content="Gruppstorlek" Padding="0" Width="107" FontWeight="Bold" FontSize="14"/>
                 <TextBox x:Name="GroupSizeTxtBox" Text="3" Height="23" TextWrapping="Wrap" Width="35" />
                 <Button x:Name="GroupBtn" Margin="10,0,0,0" Content="Skapa grupper" Click="GroupBtn_Click" Padding="10,0,10,0" />
-
             </StackPanel>
-            <DataGrid x:Name="NameTable" Grid.Row="1" Margin="0,10,0,0" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" AlternatingRowBackground="#FF73E2D8" AlternationCount="1">
+            
+            <DataGrid x:Name="NameTable" Grid.Row="1" Margin="0,10,0,0" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" AlternatingRowBackground="#FFEFEFEF" AlternationCount="1">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Förnamn" Binding="{Binding FirstName}"/>
                     <DataGridTextColumn Header="Efternamn" Binding="{Binding LastName}"/>
                     <DataGridCheckBoxColumn Header="Deltar" Binding="{Binding Deltar}"/>
-                    <DataGridCheckBoxColumn Header="Gruppledare" Binding="{Binding Leder}"/>
                 </DataGrid.Columns>
                 <!--<DataGrid.RowDetailsTemplate>
             <DataTemplate>

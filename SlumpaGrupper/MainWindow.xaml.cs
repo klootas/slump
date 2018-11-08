@@ -91,26 +91,6 @@ namespace SlumpaGrupper
                 .ToArray();
 
             int actualNrOfGroups = persons.Count / groupSize;
-            int nextLeaderPos = 0;
-            int numOfLeaders = 0;
-
-            for (int i = 0; i < sortedPersons.Length; i++)
-            {
-                sortedPersons[i].DeLedifiy();
-            }
-
-            for (int i = 0; i < sortedPersons.Length; i++)
-            {
-                if (sortedPersons[i].Leder == true && numOfLeaders < actualNrOfGroups)
-                {
-                    sortedPersons[i].MakeLeader();
-                    Person tmp = sortedPersons[nextLeaderPos];
-                    sortedPersons[nextLeaderPos] = sortedPersons[i];
-                    sortedPersons[i] = tmp;
-                    numOfLeaders++;
-                    nextLeaderPos += groupSize;
-                }
-            }
 
             int groupNumber = 0;
 
