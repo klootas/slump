@@ -59,11 +59,11 @@ namespace SlumpaGrupper
             NameTable.ItemsSource = persons;
 
             // Loads in last group from file
-                // FIXME Json loading from file doesn't load expected values.
-                //groupData.ItemsSource = TextReader.LoadLastGroup();
-                //groupData.Visibility = Visibility.Visible;
+            // FIXME Json loading from file doesn't load expected values.
+            //groupData.ItemsSource = TextReader.LoadLastGroup();
+            //groupData.Visibility = Visibility.Visible;
         }
-        
+
         private void GroupBtn_Click(object sender, RoutedEventArgs e)
         {
             BindGroups();
@@ -90,10 +90,9 @@ namespace SlumpaGrupper
                 .OrderBy(p => Guid.NewGuid())
                 .ToArray();
 
-            int actualNrOfGroups = persons.Count / groupSize;
+            int numberOfGroups = (int)Math.Round(persons.Count / (float)groupSize, 0);
 
             int groupNumber = 0;
-
             for (int i = 0; i < sortedPersons.Length; i++)
             {
                 if (i % groupSize == 0)
@@ -101,27 +100,6 @@ namespace SlumpaGrupper
                     groupNumber++;
                 }
                 sortedPersons[i].Group = $"Grupp {groupNumber}";
-            }
-            
-            // Find all members of the last group
-            var lastGroup = sortedPersons.Where(p => p.Group == $"Grupp {groupNumber}");
-
-            // If last group is not full enough.
-            if (lastGroup.Count() < groupSize)
-            {
-                int lastGroupId = groupNumber - 1;
-                int assignToGroupNumber = groupNumber;
-
-                foreach (var item in lastGroup)
-                {
-                    assignToGroupNumber--;
-                    if (assignToGroupNumber < 1)
-                    {
-                        assignToGroupNumber = lastGroupId;
-                    }
-
-                    item.Group = $"Grupp {assignToGroupNumber}";
-                }
             }
 
             var filteredSortedPersons = sortedPersons
@@ -145,7 +123,7 @@ namespace SlumpaGrupper
             groupData.ItemsSource = content;
             groupPanel.Visibility = Visibility.Visible;
         }
-        
+
         // Unsuccessful hack to fix width during zooming down the font width
         private void DataGrid_SizeChanged(object sender, SizeChangedEventArgs e)
         {
