@@ -14,20 +14,20 @@ namespace SlumpaGrupper
         public string Name { get; set; }
         public string Group { get; set; }
 
-        public bool Deltar
+        public bool IsParticipating
         {
-            get { return (bool)GetValue(DeltarProperty); }
-            set { SetValue(DeltarProperty, value); }
+            get { return (bool)GetValue(IsParticipatingProperty); }
+            set { SetValue(IsParticipatingProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for Deltar.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty DeltarProperty =
-            DependencyProperty.Register(nameof(Deltar), typeof(bool), typeof(Person));
+        public static readonly DependencyProperty IsParticipatingProperty =
+            DependencyProperty.Register(nameof(IsParticipating), typeof(bool), typeof(Person));
 
         public Person(string name)
         {
             Name = name;
-            Deltar = true;
+            IsParticipating = true;
         }
 
         public override string ToString()

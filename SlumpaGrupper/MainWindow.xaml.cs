@@ -80,7 +80,7 @@ namespace SlumpaGrupper
             }
 
             var sortedPersons = persons
-                .Where(p => p.Deltar == true)
+                .Where(p => p.IsParticipating == true)
                 .OrderBy(p => Guid.NewGuid())
                 .ToArray();
 

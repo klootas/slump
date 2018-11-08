@@ -49,7 +49,7 @@
             <DataGrid x:Name="NameTable" Grid.Row="1" Margin="0,10,0,0" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" AlternatingRowBackground="#FFEFEFEF" AlternationCount="1">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Namn" Binding="{Binding Name}"/>
-                    <DataGridCheckBoxColumn Header="Deltar" Binding="{Binding Deltar}"/>
+                    <DataGridCheckBoxColumn Header="Deltar" Binding="{Binding IsParticipating}"/>
                 </DataGrid.Columns>
                 <!--<DataGrid.RowDetailsTemplate>
             <DataTemplate>
