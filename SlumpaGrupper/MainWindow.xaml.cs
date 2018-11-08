@@ -84,16 +84,14 @@ namespace SlumpaGrupper
                 .OrderBy(p => Guid.NewGuid())
                 .ToArray();
 
-            int numberOfGroups = (int)Math.Round(persons.Count / (float)groupSize, 0);
+            int numberOfGroups = (int)Math.Round(sortedPersons.Length / (float)groupSize, 0);
 
             int groupNumber = 0;
-            for (int i = 0; i < sortedPersons.Length; i++)
+
+            foreach (var person in sortedPersons)
             {
-                if (i % groupSize == 0)
-                {
-                    groupNumber++;
-                }
-                sortedPersons[i].Group = $"Grupp {groupNumber}";
+                int index = groupNumber++ % numberOfGroups;
+                person.Group = $"Grupp {index + 1}";
             }
 
             var filteredSortedPersons = sortedPersons
