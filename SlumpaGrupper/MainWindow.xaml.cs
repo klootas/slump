@@ -33,16 +33,28 @@ namespace SlumpaGrupper
 
             PopulatePersons();
 
+            UI_Controller.FileSaved += OnFileSaved;
+            
             //Loaded += (s, e) => BindGroups();
+        }
+
+        private void OnFileSaved()
+        {
+            persons.Clear();
+            PopulatePersons();
+
+            groupData.ItemsSource = null;
+            groupPanel.Visibility = Visibility.Hidden;
         }
 
         public void PopulatePersons()
         {
+            NameTable.ItemsSource = null;
+
             string[] personsFromFile = TextReader.LoadFromFile();
 
             if (personsFromFile.Length == 0 || personsFromFile[0] == "")
             {
-                NameTable.ItemsSource = null;
                 return;
             }
 
@@ -165,8 +177,8 @@ namespace SlumpaGrupper
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            AddWindow win2 = new AddWindow();
-            win2.Show();
+            AddWindow window = new AddWindow();
+            window.ShowDialog();
         }
 
         private void PresentationBtn_Click(object sender, RoutedEventArgs e)

@@ -19,6 +19,8 @@ namespace SlumpaGrupper
     /// </summary>
     public partial class AddWindow : Window
     {
+        bool userCanceled = true;
+
         public AddWindow()
         {
             InitializeComponent();
@@ -35,15 +37,15 @@ namespace SlumpaGrupper
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            // Restart the program to load in all text again.
-            // FIXME find a way to load PopulatePersons from the main window so we don't have to restart the whole program. 
+            if (userCanceled)
+                return;
+
             TextReader.SaveToFile(StudentsTxtBox.Text.Replace(", ", Environment.NewLine));
-            System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
-            Application.Current.Shutdown();
         }
 
         private void SaveBtn_Click(object sender, RoutedEventArgs e)
         {
+            userCanceled = false;
             this.Close();
         }
     }

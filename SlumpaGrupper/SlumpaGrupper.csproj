@@ -79,6 +79,7 @@
       <DependentUpon>AddWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="TextReader.cs" />
+    <Compile Include="UI-Controller.cs" />
     <Page Include="AddWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

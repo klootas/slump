@@ -13,6 +13,6 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <TextBox x:Name="StudentsTxtBox" Grid.Row="0" AcceptsReturn="True" TextWrapping="Wrap" />
-        <Button x:Name="SaveBtn" Grid.Row="1" Content="Spara" HorizontalAlignment="Stretch" Click="SaveBtn_Click" Padding="5" />
+        <Button x:Name="SaveBtn" Grid.Row="1" Content="Spara" HorizontalAlignment="Stretch" IsDefault="True" Click="SaveBtn_Click" Padding="5" />
     </Grid>
 </Window>

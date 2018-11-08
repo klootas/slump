@@ -34,6 +34,7 @@ namespace SlumpaGrupper
         public static void SaveToFile(string content)
         {
             File.WriteAllText("Studenter.txt", content, Encoding.Default);
+            UI_Controller.SaveFile();
         }
 
         public static void SaveGroup(IEnumerable groupToSave)
