@@ -141,15 +141,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="teamwork.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="team.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="group.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="groupw.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
