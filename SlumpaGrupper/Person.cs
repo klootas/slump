@@ -5,14 +5,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-
+using Newtonsoft.Json;
 
 namespace SlumpaGrupper
 {
-    class Person: DependencyObject
+    [JsonObject(MemberSerialization.OptIn)]
+    public class Person: DependencyObject
     {
+        [JsonProperty]
         public string Name { get; set; }
+        [JsonProperty]
         public string Group { get; set; }
+
+        [JsonProperty]
+        public bool Presented { get; set; }
 
         public bool IsParticipating
         {
@@ -28,6 +34,7 @@ namespace SlumpaGrupper
         {
             Name = name;
             IsParticipating = true;
+            Presented= false;
         }
 
         public override string ToString()

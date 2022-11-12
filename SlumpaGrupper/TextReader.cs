@@ -6,35 +6,37 @@ using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json;
 using System.Collections;
+using System.Diagnostics.Contracts;
+using System.Runtime.Remoting.Messaging;
+
 
 namespace SlumpaGrupper
 {
     class TextReader
     {
-        static string[] lines;
 
-        public static string[] LoadFromFile()
+
+        public static Person[] LoadFromFile()
         {
-            string file = "Studenter.txt";
+            string file = "Studenter.json";
+            List<Person> tmp = new List<Person>();
 
             if (File.Exists(file))
             {
-                lines = File.ReadAllLines(file, Encoding.Default);
-            }
-            else
-            {
-                File.Create("Studenter.txt");
-                lines = new string[1];
-                lines[0] = "";
+                string json = File.ReadAllText(file);
+                 tmp = JsonConvert.DeserializeObject<List<Person>>(json);
             }
 
-            return lines;
+
+            return tmp.ToArray();
         }
 
-        public static void SaveToFile(string content)
+        public static void SaveToFile(List<Person> content)
         {
-            File.WriteAllText("Studenter.txt", content, Encoding.Default);
-            UI_Controller.SaveFile();
+            
+            string json = JsonConvert.SerializeObject(content);
+            File.WriteAllText("Studenter.json", json);
+            //UI_Controller.SaveFile();
         }
 
         public static void SaveGroup(IEnumerable groupToSave)

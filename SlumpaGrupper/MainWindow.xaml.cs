@@ -1,20 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SlumpaGrupper
 {
@@ -23,7 +12,7 @@ namespace SlumpaGrupper
     /// </summary>
     public partial class MainWindow : Window
     {
-        List<Person> persons = new List<Person>();
+        public static List<Person> persons = new List<Person>();
 
         IGrouping<string, Person>[] groupDataContent;
 
@@ -34,8 +23,8 @@ namespace SlumpaGrupper
             PopulatePersons();
 
             UI_Controller.FileSaved += OnFileSaved;
-            
-            //Loaded += (s, e) => BindGroups();
+
+            Loaded += (s, e) => GroupOnOpen();
         }
 
         private void OnFileSaved()
@@ -51,17 +40,14 @@ namespace SlumpaGrupper
         {
             NameTable.ItemsSource = null;
 
-            string[] personsFromFile = TextReader.LoadFromFile();
+            Person[] personsFromFile = TextReader.LoadFromFile();
 
-            if (personsFromFile.Length == 0 || personsFromFile[0] == "")
+            if (personsFromFile == null)
             {
                 return;
             }
 
-            foreach (var student in personsFromFile)
-            {
-                persons.Add(new Person(student));
-            }
+            persons.AddRange(personsFromFile);
             NameTable.ItemsSource = persons;
 
             // Loads in last group from file
@@ -73,7 +59,6 @@ namespace SlumpaGrupper
         private void GroupBtn_Click(object sender, RoutedEventArgs e)
         {
             BindGroups();
-            var data = groupData.ItemsSource;
 
             // FIXME Json saving current group data is disabled until loading works
             //TextReader.SaveGroup(data);
@@ -89,6 +74,11 @@ namespace SlumpaGrupper
             {
                 // Antal grupper har inte en siffra som inmatning.
                 return;
+            }
+
+            foreach (var person in persons)
+            {
+                person.Presented = false;
             }
 
             var sortedPersons = persons
@@ -114,6 +104,25 @@ namespace SlumpaGrupper
 
             // FIXME Json saving current group data is disabled until loading works
             //TextReader.SaveGroup(filteredSortedPersons);
+
+            TextReader.SaveToFile(MainWindow.persons);
+
+            groupData.ItemsSource = filteredSortedPersons;
+            groupPanel.Visibility = Visibility.Visible;
+        }
+
+        private void GroupOnOpen()
+        {
+            var filteredSortedPersons = persons
+                .GroupBy(o => o.Group)
+                .ToArray();
+
+            groupDataContent = filteredSortedPersons;
+
+            // FIXME Json saving current group data is disabled until loading works
+            //TextReader.SaveGroup(filteredSortedPersons);
+
+            TextReader.SaveToFile(MainWindow.persons);
 
             groupData.ItemsSource = filteredSortedPersons;
             groupPanel.Visibility = Visibility.Visible;
@@ -183,19 +192,52 @@ namespace SlumpaGrupper
 
         private void PresentationBtn_Click(object sender, RoutedEventArgs e)
         {
+            //TODO: Remove unecessary code.
             int groupDataContentSize = groupDataContent.Length;
 
+            int i = 0;
             Random random = new Random();
 
             int randomGroup = random.Next(0, groupDataContentSize);
 
+
+
+            for (int j = 0; j < groupDataContentSize; j++)
+            {
+                foreach (var person in groupDataContent[j])
+                {
+                    if (person.Presented)
+                    {
+                        i++;
+                        break;
+                    }
+                }
+            }
+
+            if (i == groupDataContentSize)
+            {
+                MessageBox.Show("Alla grupper har presenterat.");
+                return;
+            }
+
             var messageGroup = groupDataContent[randomGroup].ToList();
+
             string message = null;
+            while (messageGroup[0].Presented == true)
+            {
+                randomGroup = random.Next(0, groupDataContentSize);
+                messageGroup = groupDataContent[randomGroup].ToList();
+
+            }
+
 
             foreach (var item in messageGroup)
             {
                 message += item.ToString() + Environment.NewLine;
+                item.Presented = true;
             }
+
+            TextReader.SaveToFile(persons);
 
             MessageBox.Show(message.ToString());
         }
