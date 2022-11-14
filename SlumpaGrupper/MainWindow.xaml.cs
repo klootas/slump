@@ -218,54 +218,30 @@ namespace SlumpaGrupper
         private void PresentationBtn_Click(object sender, RoutedEventArgs e)
         {
             //TODO: Remove unecessary code.
-            int groupDataContentSize = groupDataContent.Length;
+            Restart:
+            var notPresented = groupDataContent.Where(p => !p.ToArray()[0].Presented).ToArray();
+            int groupDataContentSize = notPresented.Length;
 
-
-
-            int i = 0;
-
-            for (int j = 0; j < groupDataContentSize; j++)
+            if (groupDataContentSize == 0)
             {
-                foreach (var person in groupDataContent[j])
-                {
-                    if (person.Presented)
-                    {
-                        i++;
-                        break;
-                    }
-                }
-            }
-
-
-
-            if (i == groupDataContentSize)
-            {
-                foreach (Person person in persons)
+                foreach (var person in persons)
                 {
                     person.Presented= false;
                 }
+                goto Restart;
             }
-
-            groupDataContentSize = groupDataContent.Length;
 
             Random random = new Random();
             int randomGroup = random.Next(0, groupDataContentSize);
 
-            var messageGroup = groupDataContent[randomGroup].ToList();
+            var messageGroup = notPresented[randomGroup].ToList();
 
             string message = null;
-            while (messageGroup[0].Presented == true)
-            {
-                randomGroup = random.Next(0, groupDataContentSize);
-                messageGroup = groupDataContent[randomGroup].ToList();
-
-            }
-
 
             foreach (var item in messageGroup)
             {
                 message += item.ToString() + Environment.NewLine;
-                item.Presented = true;
+                item.Presented= true;
             }
 
             TextReader.SaveToFile(persons);
