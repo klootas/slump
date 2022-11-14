@@ -42,18 +42,42 @@ namespace SlumpaGrupper
 
             Person[] personsFromFile = TextReader.LoadFromFile();
 
-            if (personsFromFile == null)
+            if (personsFromFile.Length == 0 || personsFromFile == null)
             {
+                HideUnhide(true);
                 return;
             }
 
+            persons.Clear();
+
             persons.AddRange(personsFromFile);
+            HideUnhide(false);
+
+
             NameTable.ItemsSource = persons;
 
             // Loads in last group from file
             // FIXME Json loading from file doesn't load expected values.
             //groupData.ItemsSource = TextReader.LoadLastGroup();
             //groupData.Visibility = Visibility.Visible;
+        }
+
+        private void HideUnhide(bool b)
+        {
+            if (b)
+            {
+
+                PresentationBtn.Visibility = Visibility.Hidden;
+                groupPanel.Visibility = Visibility.Hidden;
+                fontSlider.Visibility = Visibility.Hidden;
+                groupData.ItemsSource = null;
+            }
+            else
+            {
+                PresentationBtn.Visibility = Visibility.Visible;
+                groupPanel.Visibility = Visibility.Visible;
+                fontSlider.Visibility = Visibility.Visible;
+            }
         }
 
         private void GroupBtn_Click(object sender, RoutedEventArgs e)
@@ -188,6 +212,7 @@ namespace SlumpaGrupper
         {
             AddWindow window = new AddWindow();
             window.ShowDialog();
+            PopulatePersons();
         }
 
         private void PresentationBtn_Click(object sender, RoutedEventArgs e)
@@ -195,12 +220,9 @@ namespace SlumpaGrupper
             //TODO: Remove unecessary code.
             int groupDataContentSize = groupDataContent.Length;
 
+
+
             int i = 0;
-            Random random = new Random();
-
-            int randomGroup = random.Next(0, groupDataContentSize);
-
-
 
             for (int j = 0; j < groupDataContentSize; j++)
             {
@@ -214,11 +236,20 @@ namespace SlumpaGrupper
                 }
             }
 
+
+
             if (i == groupDataContentSize)
             {
-                MessageBox.Show("Alla grupper har presenterat.");
-                return;
+                foreach (Person person in persons)
+                {
+                    person.Presented= false;
+                }
             }
+
+            groupDataContentSize = groupDataContent.Length;
+
+            Random random = new Random();
+            int randomGroup = random.Next(0, groupDataContentSize);
 
             var messageGroup = groupDataContent[randomGroup].ToList();
 

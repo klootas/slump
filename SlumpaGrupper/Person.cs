@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
 using System.Windows;
-using Newtonsoft.Json;
 
 namespace SlumpaGrupper
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class Person: DependencyObject
+    public class Person : DependencyObject
     {
         [JsonProperty]
-        public string Name { get; set; }
+        public string Name
+        {
+            get => _name.Trim();
+            set => _name = value;
+        }
+
+        string _name;
         [JsonProperty]
         public string Group { get; set; }
 
@@ -34,7 +34,7 @@ namespace SlumpaGrupper
         {
             Name = name;
             IsParticipating = true;
-            Presented= false;
+            Presented = false;
         }
 
         public override string ToString()

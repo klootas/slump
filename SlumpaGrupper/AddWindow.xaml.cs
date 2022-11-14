@@ -36,7 +36,7 @@ namespace SlumpaGrupper
             if (userCanceled)
                 return;
             List<Person> tmp = new List<Person>();
-            string[] students = StudentsTxtBox.Text.Split(',');
+            string[] students = StudentsTxtBox.Text.Split(',','\n');
             foreach (var student in students)
             {
 
