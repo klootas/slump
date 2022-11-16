@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,6 +22,20 @@ namespace SlumpaGrupper
         public MainWindow()
         {
             InitializeComponent();
+
+
+            this.Top = Properties.Settings.Default.Top;
+            this.Left = Properties.Settings.Default.Left;
+            this.Height = Properties.Settings.Default.Height;
+            this.Width = Properties.Settings.Default.Width;
+            fontSlider.Value = Properties.Settings.Default.Slider;
+            DoWork(fontSlider.Value);
+            // Very quick and dirty - but it does the job
+            if (Properties.Settings.Default.WindowState == WindowState.Maximized)
+            {
+                WindowState = WindowState.Maximized;
+            }
+
 
             PopulatePersons();
 
@@ -312,16 +327,15 @@ namespace SlumpaGrupper
             // Implement move data here, depends on your implementation
             MoveDataFromSrcToDest(dgSrc, dg, data);
             // OR
-            //MoveDataFromSrcToDest(dgSrc.DataContext, dg.DataContext, data);
+            //MoveDataFromSrcToDest(dgSrc.ItemsSource, dg.ItemsSource, data);
         }
 
         private void MoveDataFromSrcToDest(DataGrid dgSrc, DataGrid dg, object data)
         {
-            var myList = dg.ItemsSource;
-            
             Person tmp = (Person)data;
-            //TextReader.SaveGroup(persons);
-
+            tmp.Group = persons.Where(x => x.Name == dg.Items[0].ToString()).First().Group;
+            TextReader.SaveToFile(persons);
+            GroupOnOpen();
         }
 
         private void GroupBoxes_PreviewDragOver(object sender, DragEventArgs e)
@@ -344,5 +358,29 @@ namespace SlumpaGrupper
             return null;
         }
 
+        private void TheWindow_Closing(object sender, CancelEventArgs e)
+        {
+            if (WindowState == WindowState.Maximized)
+            {
+                // Use the RestoreBounds as the current values will be 0, 0 and the size of the screen
+                Properties.Settings.Default.Top = RestoreBounds.Top;
+                Properties.Settings.Default.Left = RestoreBounds.Left;
+                Properties.Settings.Default.Height = RestoreBounds.Height;
+                Properties.Settings.Default.Width = RestoreBounds.Width;
+                Properties.Settings.Default.WindowState = WindowState.Maximized;
+
+            }
+            else
+            {
+                Properties.Settings.Default.Top = this.Top;
+                Properties.Settings.Default.Left = this.Left;
+                Properties.Settings.Default.Height = this.Height;
+                Properties.Settings.Default.Width = this.Width;
+                Properties.Settings.Default.WindowState = WindowState.Normal;
+
+            }
+            Properties.Settings.Default.Slider = fontSlider.Value;
+            Properties.Settings.Default.Save();
+        }
     }
 }

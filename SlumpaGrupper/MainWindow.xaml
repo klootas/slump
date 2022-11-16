@@ -4,7 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SlumpaGrupper"
+        Closing="TheWindow_Closing"
         mc:Ignorable="d"
+        
         Title="Group Randomizer Pro Ultra+" d:DesignHeight="635.435" d:DesignWidth="580.19">
 
     <Window.Resources>
@@ -21,6 +23,7 @@
             </Setter>
         </Style>
     </Window.Resources>
+    
 
     <Grid Margin="0">
         <Grid.ColumnDefinitions>
@@ -114,8 +117,8 @@
                                           >
                                     <DataGrid.Columns>
                                         <DataGridTextColumn 
-                                            Header="Namn" 
                                             Binding="{Binding Name}"  
+                                            Header="Namn" 
                                             Width="Auto" 
                                             IsReadOnly="True" />
                                     </DataGrid.Columns>
