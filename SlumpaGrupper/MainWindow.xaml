@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SlumpaGrupper"
         mc:Ignorable="d"
-        Title="Group Randomizer Pro Ultra+" Height="747.384" Width="661.491">
+        Title="Group Randomizer Pro Ultra+" d:DesignHeight="635.435" d:DesignWidth="580.19">
 
     <Window.Resources>
         <Style x:Key="GroupHeaderStyle" TargetType="{x:Type GroupItem}">
@@ -54,8 +54,8 @@
 
             <DataGrid x:Name="NameTable" RowHeaderWidth="0" Grid.Row="2" Margin="0" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" AlternatingRowBackground="#FFEFEFEF" AlternationCount="1">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
-                    <DataGridCheckBoxColumn Header="Participating" Binding="{Binding IsParticipating}" />
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="110"/>
+                    <DataGridCheckBoxColumn Header="Participating" Binding="{Binding IsParticipating}" Width="120" />
                 </DataGrid.Columns>
                 <!--<DataGrid.RowDetailsTemplate>
             <DataTemplate>
@@ -92,9 +92,32 @@
                         <DataTemplate>
                             <StackPanel Margin="0,0,20,20" >
                                 <TextBlock TextAlignment="Center" Text="{Binding Group}" FontWeight="Bold" Width="Auto" />
-                                <DataGrid RowHeaderWidth="0" MinColumnWidth="125" HeadersVisibility="None" SizeChanged="DataGrid_SizeChanged" HorizontalAlignment="Left" FontSize="{Binding Value, ElementName=fontSlider}" AutoGenerateColumns="False" ItemsSource="{Binding}" Margin="0,5,0,0" AlternatingRowBackground="White" AlternationCount="2" RowBackground="#FFFAFAFA">
+                                <DataGrid Name="GroupBoxes"  
+                                          RowHeaderWidth="0" 
+                                          MinColumnWidth="125" 
+                                          HeadersVisibility="None" 
+                                          SizeChanged="DataGrid_SizeChanged" 
+                                          HorizontalAlignment="Left" 
+                                          FontSize="{Binding Value, ElementName=fontSlider}" 
+                                          AutoGenerateColumns="False" 
+                                          ItemsSource="{Binding}" 
+                                          Margin="0,5,0,0" 
+                                          AlternatingRowBackground="White" 
+                                          AlternationCount="2" 
+                                          RowBackground="#FFFAFAFA" 
+                                          AllowDrop="True"
+                                          PreviewMouseMove="GroupBoxes_PreviewMouseMove"
+                                          PreviewMouseLeftButtonDown="GroupBoxes_PreviewMouseLeftButtonDown"
+                                          PreviewMouseUp="GroupBoxes_PreviewMouseUp"
+                                          Drop="GroupBoxes_Drop"
+                                          PreviewDragOver="GroupBoxes_PreviewDragOver"
+                                          >
                                     <DataGrid.Columns>
-                                        <DataGridTextColumn Header="Namn" Binding="{Binding Name}"  Width="Auto" />
+                                        <DataGridTextColumn 
+                                            Header="Namn" 
+                                            Binding="{Binding Name}"  
+                                            Width="Auto" 
+                                            IsReadOnly="True" />
                                     </DataGrid.Columns>
                                 </DataGrid>
                             </StackPanel>

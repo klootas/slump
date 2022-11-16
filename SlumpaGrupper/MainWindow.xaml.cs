@@ -4,6 +4,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace SlumpaGrupper
 {
@@ -54,7 +56,7 @@ namespace SlumpaGrupper
             HideUnhide(false);
 
 
-            NameTable.ItemsSource = persons;
+            NameTable.ItemsSource = persons.OrderBy(p => p.Name);
 
             // Loads in last group from file
             // FIXME Json loading from file doesn't load expected values.
@@ -161,6 +163,7 @@ namespace SlumpaGrupper
             groupPanel.Visibility = Visibility.Visible;
         }
 
+
         // Unsuccessful hack to fix width during zooming down the font width
         private void DataGrid_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -217,17 +220,13 @@ namespace SlumpaGrupper
 
         private void PresentationBtn_Click(object sender, RoutedEventArgs e)
         {
-            //TODO: Remove unecessary code.
-            Restart:
+        Restart:
             var notPresented = groupDataContent.Where(p => !p.ToArray()[0].Presented).ToArray();
             int groupDataContentSize = notPresented.Length;
 
             if (groupDataContentSize == 0)
             {
-                foreach (var person in persons)
-                {
-                    person.Presented= false;
-                }
+                persons.ForEach(p => p.Presented = false);
                 goto Restart;
             }
 
@@ -241,12 +240,109 @@ namespace SlumpaGrupper
             foreach (var item in messageGroup)
             {
                 message += item.ToString() + Environment.NewLine;
-                item.Presented= true;
+                item.Presented = true;
             }
 
             TextReader.SaveToFile(persons);
 
             MessageBox.Show(message.ToString());
         }
+
+        private Point? _startPoint;
+        private void NameTable_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void GroupBoxes_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+
+            // No drag operation
+            if (_startPoint == null)
+                return;
+
+            var dg = sender as DataGrid;
+            if (dg == null) return;
+            // Get the current mouse position
+            Point mousePos = e.GetPosition(null);
+            Vector diff = _startPoint.Value - mousePos;
+            // test for the minimum displacement to begin the drag
+            if (e.LeftButton == MouseButtonState.Pressed &&
+                (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
+                Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance))
+            {
+
+                // Get the dragged DataGridRow
+                var DataGridRow =
+                    FindAnchestor<DataGridRow>((DependencyObject)e.OriginalSource);
+
+                if (DataGridRow == null)
+                    return;
+                // Find the data behind the DataGridRow
+                var dataTodrop = (Person)dg.ItemContainerGenerator.
+                    ItemFromContainer(DataGridRow);
+
+                if (dataTodrop == null) return;
+
+                // Initialize the drag & drop operation
+                var dataObj = new DataObject(dataTodrop);
+                dataObj.SetData("DragSource", sender);
+                DragDrop.DoDragDrop(dg, dataObj, DragDropEffects.Copy);
+                _startPoint = null;
+            }
+        }
+
+        private void GroupBoxes_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            _startPoint = e.GetPosition(null);
+        }
+
+        private void GroupBoxes_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            _startPoint = null;
+        }
+
+        private void GroupBoxes_Drop(object sender, DragEventArgs e)
+        {
+            var dg = sender as DataGrid;
+            if (dg == null) return;
+            var dgSrc = e.Data.GetData("DragSource") as DataGrid;
+            var data = e.Data.GetData(typeof(Person));
+            if (dgSrc == null || data == null) return;
+            // Implement move data here, depends on your implementation
+            MoveDataFromSrcToDest(dgSrc, dg, data);
+            // OR
+            //MoveDataFromSrcToDest(dgSrc.DataContext, dg.DataContext, data);
+        }
+
+        private void MoveDataFromSrcToDest(DataGrid dgSrc, DataGrid dg, object data)
+        {
+            var myList = dg.ItemsSource;
+            
+            Person tmp = (Person)data;
+            //TextReader.SaveGroup(persons);
+
+        }
+
+        private void GroupBoxes_PreviewDragOver(object sender, DragEventArgs e)
+        {
+            //if false e.Effects = DragDropEffects.None;
+        }
+
+        private static T FindAnchestor<T>(DependencyObject current)
+        where T : DependencyObject
+        {
+            do
+            {
+                if (current is T)
+                {
+                    return (T)current;
+                }
+                current = VisualTreeHelper.GetParent(current);
+            }
+            while (current != null);
+            return null;
+        }
+
     }
 }
