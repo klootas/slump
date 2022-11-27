@@ -94,5 +94,17 @@ namespace SlumpaGrupper.Properties {
                 this["Slider"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public int GroupSize {
+            get {
+                return ((int)(this["GroupSize"]));
+            }
+            set {
+                this["GroupSize"] = value;
+            }
+        }
     }
 }

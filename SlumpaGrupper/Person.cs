@@ -20,6 +20,7 @@ namespace SlumpaGrupper
         [JsonProperty]
         public bool Presented { get; set; }
 
+        [JsonProperty]
         public bool IsParticipating
         {
             get { return (bool)GetValue(IsParticipatingProperty); }

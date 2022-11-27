@@ -57,8 +57,8 @@
 
             <DataGrid x:Name="NameTable" RowHeaderWidth="0" Grid.Row="2" Margin="0" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" AlternatingRowBackground="#FFEFEFEF" AlternationCount="1">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="110"/>
-                    <DataGridCheckBoxColumn Header="Participating" Binding="{Binding IsParticipating}" Width="120" />
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                    <DataGridCheckBoxColumn Header="Participating" Binding="{Binding IsParticipating}"/>
                 </DataGrid.Columns>
                 <!--<DataGrid.RowDetailsTemplate>
             <DataTemplate>

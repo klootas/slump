@@ -28,6 +28,7 @@ namespace SlumpaGrupper
             this.Left = Properties.Settings.Default.Left;
             this.Height = Properties.Settings.Default.Height;
             this.Width = Properties.Settings.Default.Width;
+            GroupSizeTxtBox.Text = Properties.Settings.Default.GroupSize.ToString();
             fontSlider.Value = Properties.Settings.Default.Slider;
             DoWork(fontSlider.Value);
             // Very quick and dirty - but it does the job
@@ -71,7 +72,8 @@ namespace SlumpaGrupper
             HideUnhide(false);
 
 
-            NameTable.ItemsSource = persons.OrderBy(p => p.Name);
+            NameTable.ItemsSource = persons.OrderBy(p => p.Name).ToList();
+            //NameTable.ItemsSource = persons.OrderBy(p => p.Name);
 
             // Loads in last group from file
             // FIXME Json loading from file doesn't load expected values.
@@ -155,6 +157,7 @@ namespace SlumpaGrupper
         private void GroupOnOpen()
         {
             var filteredSortedPersons = persons
+                .Where(o => o.Group != null && o.IsParticipating)
                 .GroupBy(o => o.Group)
                 .ToArray();
 
@@ -266,6 +269,8 @@ namespace SlumpaGrupper
         private Point? _startPoint;
         private void NameTable_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            var dg = sender as DataGrid;
+            persons.Where(x => x.Name == dg.Items[0].ToString()).First().IsParticipating = false;
 
         }
 
@@ -380,7 +385,9 @@ namespace SlumpaGrupper
 
             }
             Properties.Settings.Default.Slider = fontSlider.Value;
+            Properties.Settings.Default.GroupSize = int.Parse(GroupSizeTxtBox.Text);
             Properties.Settings.Default.Save();
         }
+
     }
 }
