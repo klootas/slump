@@ -140,7 +140,9 @@ namespace SlumpaGrupper
             }
 
             var filteredSortedPersons = sortedPersons
+                .OrderBy(o => o.Name)
                 .GroupBy(o => o.Group)
+                .OrderBy(g => int.Parse(g.Key.Split(' ')[1]))
                 .ToArray();
 
             groupDataContent = filteredSortedPersons;
@@ -158,7 +160,9 @@ namespace SlumpaGrupper
         {
             var filteredSortedPersons = persons
                 .Where(o => o.Group != null && o.IsParticipating)
+                .OrderBy(o => o.Name)
                 .GroupBy(o => o.Group)
+                .OrderBy(g => int.Parse(g.Key.Split(' ')[1]))
                 .ToArray();
 
             groupDataContent = filteredSortedPersons;
