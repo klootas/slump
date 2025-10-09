@@ -19,6 +19,12 @@ namespace SlumpaGrupper
 
         IGrouping<string, Person>[] groupDataContent;
 
+        int _groupSize;
+
+        IEnumerable<Person> Participating => persons.Where(p => p.IsParticipating);
+        int NumberOfGroups => (int)Math.Ceiling(NumberOfParticipants / (float)_groupSize);
+        int NumberOfParticipants => Participating.Count();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -39,6 +45,7 @@ namespace SlumpaGrupper
 
 
             PopulatePersons();
+            UpdateRandomizeBtnText();
 
             UI_Controller.FileSaved += OnFileSaved;
 
@@ -86,6 +93,11 @@ namespace SlumpaGrupper
             e.Row.Header = (e.Row.GetIndex() + 1).ToString();
         }
 
+        private void NameTable_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+        {
+            UpdateRandomizeBtnText();
+        }
+
         private void HideUnhide(bool b)
         {
             if (b)
@@ -107,41 +119,78 @@ namespace SlumpaGrupper
         private void GroupBtn_Click(object sender, RoutedEventArgs e)
         {
             BindGroups();
-
+            // Placeholder workaround to be able to update text after toggling participating
+            // TODO: Make the button text reactive to the state.
+            UpdateRandomizeBtnText();
             // FIXME Json saving current group data is disabled until loading works
             //TextReader.SaveGroup(data);
         }
 
-        private void BindGroups()
+        private void GroupSize_Changed(object sender, RoutedEventArgs e)
         {
+
             bool correctInput = false;
 
-            correctInput = int.TryParse(GroupSizeTxtBox.Text, out int groupSize);
-
-            if (!correctInput)
+            string input = GroupSizeTxtBox.Text;
+            if (input == string.Empty)
             {
-                // Antal grupper har inte en siffra som inmatning.
                 return;
             }
+            correctInput = int.TryParse(input, out int groupSize);
 
+            if (correctInput)
+            {
+                _groupSize = groupSize;
+            }
+            UpdateRandomizeBtnText();
+        }
+
+        private void UpdateRandomizeBtnText()
+        {
+            GroupSizeTxtBox.Text = _groupSize.ToString();
+            if (GroupBtn != null)
+            {
+                if (NumberOfGroups > 0)
+                {
+                    string btnText;
+                    if (_groupSize > NumberOfParticipants)
+                    {
+                        btnText = $"(1x{NumberOfParticipants})";
+                    }
+                    else if (NumberOfParticipants % _groupSize == 0)
+                    {
+                        btnText = $"({NumberOfGroups}x{_groupSize})";
+                    }
+                    else
+                    {
+                        btnText = $"({NumberOfGroups - 1}x{_groupSize} + {NumberOfParticipants % _groupSize})";
+                    }
+                    GroupBtnText.Text = btnText;
+                }
+            }
+        }
+
+        private void BindGroups()
+        {
             foreach (var person in persons)
             {
                 person.Presented = false;
             }
 
-            var sortedPersons = persons
-                .Where(p => p.IsParticipating == true)
-                .OrderBy(p => Guid.NewGuid())
+            var sortedPersons = Participating.OrderBy(p => Guid.NewGuid())
                 .ToArray();
 
-            int numberOfGroups = (int)Math.Round(sortedPersons.Length / (float)groupSize, 0);
-
-            int groupNumber = 0;
-
-            foreach (var person in sortedPersons)
+            for (int groupNumber = 0; groupNumber < NumberOfGroups; groupNumber++)
             {
-                int index = groupNumber++ % numberOfGroups;
-                person.Group = $"Grupp {index + 1}";
+                for (int groupMembers = 0; groupMembers < _groupSize; groupMembers++)
+                {
+                    int index = groupNumber * _groupSize + groupMembers;
+                    if (index >= NumberOfParticipants)
+                    {
+                        break;
+                    }
+                    sortedPersons[index].Group = $"Grupp {groupNumber + 1}";
+                }
             }
 
             var filteredSortedPersons = sortedPersons
@@ -243,6 +292,7 @@ namespace SlumpaGrupper
             AddWindow window = new AddWindow();
             window.ShowDialog();
             PopulatePersons();
+            UpdateRandomizeBtnText();
         }
 
         private void PresentationBtn_Click(object sender, RoutedEventArgs e)
@@ -394,7 +444,7 @@ namespace SlumpaGrupper
 
             }
             Properties.Settings.Default.Slider = fontSlider.Value;
-            Properties.Settings.Default.GroupSize = int.Parse(GroupSizeTxtBox.Text);
+            Properties.Settings.Default.GroupSize = _groupSize;
             Properties.Settings.Default.Save();
         }
 
