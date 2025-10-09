@@ -28,7 +28,7 @@
     <Grid Margin="0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="62"/>
-            <ColumnDefinition Width="188"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
@@ -57,15 +57,15 @@
 
             <DataGrid x:Name="NameTable" RowHeaderWidth="30" Grid.Row="2" Margin="0" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" AlternatingRowBackground="#FFEFEFEF" AlternationCount="1" LoadingRow="NameTable_LoadingRow">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="Auto"/>
-                    <DataGridCheckBoxColumn Header="Participating" Binding="{Binding IsParticipating}" Width="100"/>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                    <DataGridCheckBoxColumn Header=" " Binding="{Binding IsParticipating}" Width="Auto"/>
                 </DataGrid.Columns>
                 <!--<DataGrid.RowDetailsTemplate>
             <DataTemplate>
                 <TextBlock Text="{Binding }"/>
                 
             </DataTemplate>
-        </DataGrid.RowDetailsTemplate>-->
+            </DataGrid.RowDetailsTemplate>-->
             </DataGrid>
         </Grid>
 
