@@ -61,7 +61,7 @@
                 </Button>
             </StackPanel>
 
-            <DataGrid x:Name="NameTable" RowHeaderWidth="30" Grid.Row="2" Margin="0" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" AlternatingRowBackground="#FFEFEFEF" AlternationCount="1" LoadingRow="NameTable_LoadingRow" RowEditEnding="NameTable_RowEditEnding">
+            <DataGrid x:Name="NameTable" RowHeaderWidth="30" Grid.Row="2" Margin="0" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" AlternatingRowBackground="#FFEFEFEF" AlternationCount="1" LoadingRow="NameTable_LoadingRow" RowEditEnding="NameTable_RowEditEnding" CurrentCellChanged="NameTable_CurrentCellChanged">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
                     <DataGridCheckBoxColumn Header=" " Binding="{Binding IsParticipating}" Width="Auto"/>

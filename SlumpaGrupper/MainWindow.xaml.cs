@@ -119,9 +119,6 @@ namespace SlumpaGrupper
         private void GroupBtn_Click(object sender, RoutedEventArgs e)
         {
             BindGroups();
-            // Placeholder workaround to be able to update text after toggling participating
-            // TODO: Make the button text reactive to the state.
-            UpdateRandomizeBtnText();
             // FIXME Json saving current group data is disabled until loading works
             //TextReader.SaveGroup(data);
         }
@@ -142,6 +139,11 @@ namespace SlumpaGrupper
             {
                 _groupSize = groupSize;
             }
+            UpdateRandomizeBtnText();
+        }
+
+        private void NameTable_CurrentCellChanged(object sender, EventArgs e)
+        {
             UpdateRandomizeBtnText();
         }
 
