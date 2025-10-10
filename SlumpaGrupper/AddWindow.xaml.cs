@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 namespace SlumpaGrupper
 {
@@ -36,7 +35,7 @@ namespace SlumpaGrupper
             if (userCanceled)
                 return;
             List<Person> tmp = new List<Person>();
-            string[] students = StudentsTxtBox.Text.Split(',','\n');
+            string[] students = StudentsTxtBox.Text.Split(',', '\n');
             foreach (var student in students)
             {
 
@@ -46,7 +45,7 @@ namespace SlumpaGrupper
             MainWindow.persons.AddRange(tmp);
             MainWindow.persons.RemoveAll(p => !tmp.Contains(p));
             MainWindow.persons.RemoveAll(p => p.Name == "");
-            tmp = MainWindow.persons.GroupBy(x => x.Name).Select(x => x.First()).ToList();
+            //tmp = MainWindow.persons.GroupBy(x => x.Name).Select(x => x.First()).ToList();
             TextReader.SaveToFile(tmp);
         }
 

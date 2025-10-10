@@ -1,26 +1,23 @@
-﻿using Newtonsoft.Json;
-using System.Windows;
+﻿using System.Windows;
 
 namespace SlumpaGrupper
 {
-    [JsonObject(MemberSerialization.OptIn)]
+
     public class Person : DependencyObject
     {
-        [JsonProperty]
+
+        string _name;
         public string Name
         {
             get => _name.Trim();
             set => _name = value;
         }
 
-        string _name;
-        [JsonProperty]
+
         public string Group { get; set; }
 
-        [JsonProperty]
         public bool Presented { get; set; }
 
-        [JsonProperty]
         public bool IsParticipating
         {
             get { return (bool)GetValue(IsParticipatingProperty); }
