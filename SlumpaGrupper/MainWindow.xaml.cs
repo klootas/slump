@@ -24,6 +24,7 @@ namespace SlumpaGrupper
         IEnumerable<Person> Participating => persons.Where(p => p.IsParticipating);
         int NumberOfGroups => (int)Math.Ceiling(NumberOfParticipants / (float)_groupSize);
         int NumberOfParticipants => Participating.Count();
+        int FullGroups => Math.Max(0, NumberOfParticipants - NumberOfGroups * (_groupSize - 1));
 
         public MainWindow()
         {
@@ -165,7 +166,7 @@ namespace SlumpaGrupper
                     }
                     else
                     {
-                        btnText = $"({NumberOfGroups - 1}x{_groupSize} + {NumberOfParticipants % _groupSize})";
+                        btnText = $"({FullGroups}x{_groupSize} + {NumberOfGroups - FullGroups}x{_groupSize - 1})";
                     }
                     GroupBtnText.Text = btnText;
                 }
@@ -182,17 +183,12 @@ namespace SlumpaGrupper
             var sortedPersons = Participating.OrderBy(p => Guid.NewGuid())
                 .ToArray();
 
-            for (int groupNumber = 0; groupNumber < NumberOfGroups; groupNumber++)
+            int groupNumber = 0;
+
+            foreach (var person in sortedPersons)
             {
-                for (int groupMembers = 0; groupMembers < _groupSize; groupMembers++)
-                {
-                    int index = groupNumber * _groupSize + groupMembers;
-                    if (index >= NumberOfParticipants)
-                    {
-                        break;
-                    }
-                    sortedPersons[index].Group = $"Grupp {groupNumber + 1}";
-                }
+                int index = groupNumber++ % NumberOfGroups;
+                person.Group = $"Grupp {index + 1}";
             }
 
             var filteredSortedPersons = sortedPersons
